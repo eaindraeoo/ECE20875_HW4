@@ -33,7 +33,7 @@ def main(datapath, degrees):
     B = []
 
     for n in range(len(degrees)):
-        X.append(feature_matrix(x, degrees[n]))
+        X = feature_matrix(x, degrees[n])
         B = least_squares(X, y)
         paramFits.append(B)
 
@@ -61,13 +61,15 @@ def feature_matrix(x, d):
     # Please be aware of which matrix colum corresponds to which degree polynomial when completing the writeup.
 
     X = []
-    power = 0
 
     for i in range(len(x)):
-        power = d
-        for j in range(d):
-            X.append( x[i] ** (power))
-            power = power - 1
+        A = []  # the list of exponential values for each variable in X[]
+
+        # starts from d and ends at 0 
+        for j in range(d, -1, -1):
+            A.append(x[i] ** (j))
+
+        X.append(A)
 
     return X
 
@@ -87,8 +89,10 @@ def least_squares(X, y):
     y = np.array(y)
 
     # Use the matrix algebra functions in numpy to solve the least squares equations. This can be done in just one line.
-    B = []
-    B.append(np.matmul( np.transpose(X), y) )
+    print((X.T).shape)
+    print(X.shape)
+    
+    B = ((np.linalg.inv(X.T @ X ) @ X.T) @ y).tolist()
 
     return B
 
@@ -133,9 +137,6 @@ if __name__ == "__main__":
         '''
         Fill in your code here
         '''
-        
-        
-        
 
     plt.xlabel('x', fontsize=16)
     plt.ylabel('y', fontsize=16)
