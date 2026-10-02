@@ -10,7 +10,7 @@ def main(datapath, degrees):
     # --------------------
     # datapath : A string specifying a .txt file 
     # degrees : A list of positive integers.
-    #    
+    # 
     # Output
     # --------------------
     # paramFits : a list with the same length as degrees, where paramFits[i] is the list of
@@ -29,9 +29,13 @@ def main(datapath, degrees):
         
     # iterate through each n in the list degrees, calling the feature_matrix and least_squares functions to solve
     # for the model parameters in each case. Append the result to paramFits each time.
-    '''
-    fill in your code here
-    '''
+    X = []
+    B = []
+
+    for n in range(len(degrees)):
+        X.append(feature_matrix(x, degrees[n]))
+        B = least_squares(X, y)
+        paramFits.append(B)
 
     return paramFits
 
@@ -55,9 +59,15 @@ def feature_matrix(x, d):
     # There are several ways to write this function. The most efficient would be a nested list comprehension
     # which for each sample in x calculates x^d, x^(d-1), ..., x^0.
     # Please be aware of which matrix colum corresponds to which degree polynomial when completing the writeup.
-    '''
-    fill in your code here
-    '''
+
+    X = []
+    power = 0
+
+    for i in range(len(x)):
+        power = d
+        for j in range(d):
+            X.append( x[i] ** (power))
+            power = power - 1
 
     return X
 
@@ -77,9 +87,8 @@ def least_squares(X, y):
     y = np.array(y)
 
     # Use the matrix algebra functions in numpy to solve the least squares equations. This can be done in just one line.
-    '''
-    fill in your code here
-    '''
+    B = []
+    B.append(np.matmul( np.transpose(X), y) )
 
     return B
 
@@ -102,7 +111,6 @@ if __name__ == "__main__":
     ### Part 2 ###
     # The paramater values for degrees 2 and 4 have been provided as test cases in the README.
     # The output should match up to at least 3 decimal places rounded 
-    
     
     
     # Write out the resulting estimated functions for each d.
