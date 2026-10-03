@@ -89,8 +89,6 @@ def least_squares(X, y):
     y = np.array(y)
 
     # Use the matrix algebra functions in numpy to solve the least squares equations. This can be done in just one line.
-    print((X.T).shape)
-    print(X.shape)
     
     B = ((np.linalg.inv(X.T @ X ) @ X.T) @ y).tolist()
 
@@ -162,3 +160,4 @@ if __name__ == "__main__":
         prediction += params[i] * x_value ** (len(params) - 1 - i)
 
     print(prediction)
+              
