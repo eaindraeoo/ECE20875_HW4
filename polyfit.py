@@ -134,9 +134,16 @@ if __name__ == "__main__":
     x.sort() # Ensures the scatter plot looks nice
 
     for params in paramFits:
-        '''
-        Fill in your code here
-        '''
+        y_hat = []
+
+        for value in x:
+            y_value = 0
+            for i in range(len(params)):
+                y_value += params[i] * (value ** (len(params) - 1 - i))
+
+            y_hat.append(y_value)
+        
+    plt.plot(x, y_hat)
 
     plt.xlabel('x', fontsize=16)
     plt.ylabel('y', fontsize=16)
@@ -148,8 +155,10 @@ if __name__ == "__main__":
     # TODO: when x = 2; what is the predicted output
     # Use the degree that best matches the data as determined in Problem 3 above.
     
-    '''
-    fill in your code here
-    '''
+    x_value = 2
+    prediction = 0
 
+    for i in range(len(params)):
+        prediction += params[i] * x_value ** (len(params) - 1 - i)
 
+    print(prediction)
