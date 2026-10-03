@@ -19,13 +19,21 @@ def normalize_train(X_train):
     # trn_mean : The mean of each column in the training set, np.array
     # trn_std : The std dev of each column in the training set, np.array
     
-    '''
-    Fill in your code here
-    '''
-    
-    
-
+    # if there is no training data, return empty arrays for each output
+    if len(X_train) == 0:
+        return np.array([]), np.array([]), np.array([])
+ 
+    X_train = np.array(X_train, dtype = float)
+ 
+    # mean and std dev of each column in the training set
+    trn_mean = np.mean(X_train, axis = 0)
+    trn_std = np.std(X_train, axis = 0)
+ 
+    # subtract the mean and divide by the std dev for each column
+    X = (X_train - trn_mean) / trn_std
+ 
     return X, trn_mean, trn_std
+    
 
 # Part 2
 # Function that normalizes testing set according to mean and std of training set
@@ -42,13 +50,11 @@ def normalize_test(X_test, trn_mean, trn_std):
     # --------------------
     # X : The normalized version of the feature matrix, X_test
 
-    '''
-    Fill in your code here
-    '''
-    
-    
-    
-
+    X_test = np.array(X_test, dtype=float)
+ 
+    # use the mean and std dev of the training set, not the testing set
+    X = ( X_test - trn_mean ) / trn_std
+ 
     return X
 
 
@@ -65,12 +71,7 @@ def get_lambda_range():
     # --------------------
     # lmbda : numpy array of logarithmically spaced values
     
-    '''
-    Fill in your code here
-    '''
-
-
-
+    lmbda = np.logspace(-4, 2, num = 51)
 
     return lmbda
 
@@ -89,9 +90,8 @@ def train_model(X_train, y_train, l):
     # --------------------
     # model : A numpy object containing the trained model
 
-    '''
-    Fill in your code here
-    '''
+    model = Ridge(alpha = l, fit_intercept = True)
+    model.fit(X_train, y_train)
 
     return model
 
@@ -109,9 +109,8 @@ def error(X, y, model):
     # ------------------
     # mse : Mean squared error
 
-    '''
-    Fill in your code here
-    '''
+    y_pred = model.predict(X)
+    mse = np.mean((y - y_pred) ** 2)
 
     return mse
 
@@ -180,18 +179,18 @@ def main():
     # Part 6
     # Plot the MSE as a function of lmbda
     # Note that the code to find MSE has already been completed in part 5.
-    ''' 
-    fill in your code below 
-    '''
-    plt  # <<< fill in here 
+
+    plt.plot(lmbda, MSE)
+    plt.title('MSE vs. Lambda')
+    plt.xlabel('Regularization Parameter Lambda')
+    plt.ylabel('Mean Squared Error')
+    
     plt.show()
 
     # Find best value of lmbda in terms of MSE
     # Record this value on the writeup
-    ''' 
-    fill in your code below 
-    '''
-    ind = None  # <<< fill in here
+
+    ind = int(np.argmin(MSE))
     [lmda_best, MSE_best, model_best] = [lmbda[ind], MSE[ind], MODEL[ind]]
 
     print(
@@ -204,9 +203,8 @@ def main():
     # Part 7
     # Using the best model found above, write out the model coefficients and intercept
     # Record this value on the writeup
-    ''' 
-    fill in your code below 
-    '''
+    print("Coefficients: " + str(model_best.coef_))
+    print("Intercept: " + str(model_best.intercept_))
 
     plt.show()
     return model_best
